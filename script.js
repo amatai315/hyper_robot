@@ -10,8 +10,8 @@ const boardBackgroundColor = "rgb(230,230,230)";
 const normalPlaceLineColor = "rgb(150,150,150)";
 const wallColor = "rgb(100,100,100)";
 const normalPlaceLineStrokeWidth = 0.3;
-const robot_num = 4;
 
+let isAvailableBlackRobot = false;
 let isAvailableBoardWithMirror = false;
 
 class Mark {
@@ -263,7 +263,8 @@ function redrawFullBoard() {
 function redrawRobotIcon() {
     d3.selectAll(".robot").remove();
     const place_number_array = [16 * 7 + 7, 16 * 7 + 8, 16 * 8 + 7, 16 * 8 + 8];
-    let color_array = ["rgb(0,0,255)", "rgb(0, 255,0)", "rgb(255,0,0)", "rgb(209, 217, 0)", "rgb(0,0,0)"];
+    let color_array = ["rgb(0,0,255)", "rgb(0, 255,0)", "rgb(255,0,0)", "rgb(209, 217, 0)", "rgb(70,70,70)"];
+    let robot_num = isAvailableBlackRobot ? 5 : 4;
     for (let i = 0; i < robot_num; i++){
         let place_number = Math.floor(Math.random() * 16 * 16);
         while (place_number_array.includes(place_number)) {
@@ -342,6 +343,10 @@ function updateFullBoardAndRobotAndGoal() {
 
 function changeMirrorAvailability() {
     isAvailableBoardWithMirror = !isAvailableBoardWithMirror;
+}
+
+function changeBlackRobotAbailability() {
+    isAvailableBlackRobot = !isAvailableBlackRobot;
 }
 
 drawFullBoard();
