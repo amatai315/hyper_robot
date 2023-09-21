@@ -342,7 +342,6 @@ function updateFullBoardAndRobotAndGoal() {
 
 function changeMirrorAvailability() {
     isAvailableBoardWithMirror = !isAvailableBoardWithMirror;
-    console.log(isAvailableBoardWithMirror)
 }
 
 drawFullBoard();
