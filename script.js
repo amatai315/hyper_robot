@@ -12,6 +12,8 @@ const wallColor = "rgb(100,100,100)";
 const normalPlaceLineStrokeWidth = 0.3;
 const robot_num = 4;
 
+let isAvailableBoardWithMirror = false;
+
 class Mark {
     constructor(color, shape, x, y) {
         this.color = color;
@@ -68,7 +70,10 @@ const blue_board_array = [
     new Board("blue",
         [new Mark("green", "star", 2, 6), new Mark("red", "saturn", 6, 5), new Mark("blue", "sun", 5, 1), new Mark("yellow", "moon", 1, 3)],
         [new Wall("vertical", 5, 1), new Wall("horizontal", 5, 2), new Wall("vertical", 2, 3), new Wall("horizontal", 1, 4), new Wall("horizontal", 7, 4),
-        new Wall("horizontal", 6, 5), new Wall("vertical", 7, 5), new Wall("horizontal", 2, 6), new Wall("vertical", 2, 6), new Wall("vertical", 4, 7)])
+            new Wall("horizontal", 6, 5), new Wall("vertical", 7, 5), new Wall("horizontal", 2, 6), new Wall("vertical", 2, 6), new Wall("vertical", 4, 7)]),
+    new Board("blue",
+        [new Mark("green", "star", 2, 5), new Mark("red", "saturn", 6, 2), new Mark("blue", "sun", 3, 0), new Mark("yellow", "moon", 1, 5), new Mark("red", "backslash", 0, 3), new Mark("blue", "slash", 5, 6)],
+        [new Wall("vertical", 3, 0), new Wall("horizontal", 3, 1), new Wall("horizontal", 7, 1), new Wall("horizontal", 6, 2), new Wall("vertical", 7, 2), new Wall("horizontal", 2, 5), new Wall("vertical", 2, 5), new Wall("horizontal", 1, 6), new Wall("vertical", 5, 7)])
 ];
 const green_board_array = [
     new Board("green",
@@ -81,7 +86,10 @@ const green_board_array = [
             new Wall("vertical", 7, 5), new Wall("horizontal", 6, 6), new Wall("horizontal", 1, 6), new Wall("vertical", 1, 6), new Wall("vertical", 3, 7)]),
     new Board("green",
         [new Mark("blue", "saturn", 4, 1), new Mark("red", "moon", 3, 6), new Mark("yellow", "star", 1, 4), new Mark("green", "sun", 6, 5)],
-        [new Wall("horizontal", 4, 1), new Wall("vertical", 5, 1), new Wall("horizontal", 7, 2), new Wall("vertical", 1, 4), new Wall("horizontal", 1, 4), new Wall("vertical", 6, 5), new Wall("horizontal", 6, 6), new Wall("vertical", 4, 6), new Wall("horizontal", 3, 7), new Wall("vertical", 6, 7)])
+        [new Wall("horizontal", 4, 1), new Wall("vertical", 5, 1), new Wall("horizontal", 7, 2), new Wall("vertical", 1, 4), new Wall("horizontal", 1, 4), new Wall("vertical", 6, 5), new Wall("horizontal", 6, 6), new Wall("vertical", 4, 6), new Wall("horizontal", 3, 7), new Wall("vertical", 6, 7)]),
+    new Board("green",
+        [new Mark("blue", "saturn", 4, 1), new Mark("red", "moon", 6, 4), new Mark("yellow", "star", 1, 3), new Mark("green", "sun", 5, 1), new Mark("yellow", "backslash", 2, 0), new Mark("green", "slash", 3, 6)],
+        [new Wall("horizontal", 4, 1), new Wall("vertical", 5, 1), new Wall("horizontal", 5, 2), new Wall("horizontal", 7, 2), new Wall("horizontal", 1, 3), new Wall("vertical", 1, 3), new Wall("vertical", 7, 4), new Wall("horizontal", 6, 5), new Wall("vertical", 2, 7)])
 ];
 const red_board_array = [
     new Board("red",
@@ -93,7 +101,10 @@ const red_board_array = [
         [new Wall("horizontal", 7, 2), new Wall("vertical", 1, 2), new Wall("horizontal", 0, 3), new Wall("horizontal", 5, 3), new Wall("vertical", 5, 3), new Wall("vertical", 1, 5), new Wall("horizontal", 1, 6), new Wall("horizontal", 6, 6), new Wall("vertical", 7, 6), new Wall("vertical", 4, 7)]),
     new Board("red",
         [new Mark("blue", "star", 2, 5), new Mark("yellow", "saturn", 6, 1), new Mark("red", "sun", 0, 2), new Mark("green", "moon", 5, 3)],
-        [new Wall("vertical", 7, 1), new Wall("horizontal", 6, 2), new Wall("horizontal", 7 ,3), new Wall("horizontal", 0, 2), new Wall("vertical", 1, 2), new Wall("vertical", 5, 3), new Wall("horizontal", 5, 4), new Wall("horizontal", 2, 5), new Wall("vertical", 2, 5), new Wall("vertical", 4, 7)])
+        [new Wall("vertical", 7, 1), new Wall("horizontal", 6, 2), new Wall("horizontal", 7, 3), new Wall("horizontal", 0, 2), new Wall("vertical", 1, 2), new Wall("vertical", 5, 3), new Wall("horizontal", 5, 4), new Wall("horizontal", 2, 5), new Wall("vertical", 2, 5), new Wall("vertical", 4, 7)]),
+    new Board("red",
+        [new Mark("blue", "star", 1, 5), new Mark("yellow", "saturn", 2, 1), new Mark("red", "sun", 4, 3), new Mark("green", "moon", 5, 3), new Mark("yellow", "backslash", 1, 4), new Mark("blue", "backslash", 3, 6)],
+        [new Wall("vertical", 3, 1), new Wall("horizontal", 2, 2), new Wall("horizontal", 4, 3), new Wall("vertical", 5, 3), new Wall("horizontal", 5, 4), new Wall("horizontal", 7, 5), new Wall("horizontal", 1, 5), new Wall("vertical", 1, 5), new Wall("vertical", 3, 7)])
 ];
 const yellow_board_array = [
     new Board("yellow",
@@ -105,7 +116,10 @@ const yellow_board_array = [
         [new Wall("horizontal", 7, 1), new Wall("horizontal", 0, 2), new Wall("horizontal", 5, 2), new Wall("vertical", 0, 2), new Wall("vertical", 5, 2), new Wall("vertical", 3, 3), new Wall("horizontal", 2, 4), new Wall("vertical", 6, 4), new Wall("horizontal", 6, 5), new Wall("horizontal", 1, 6), new Wall("vertical", 2, 6), new Wall("vertical", 4, 7)]),
     new Board("yellow",
         [new Mark("yellow", "sun", 1, 3), new Mark("green", "saturn", 6, 4), new Mark("red", "star", 5, 6), new Mark("rainbow", "vortex", 4, 0), new Mark("blue", "moon", 2, 1)],
-        [new Wall("horizontal", 4, 0), new Wall("vertical", 4, 0), new Wall("vertical", 2, 1), new Wall("horizontal", 2, 2), new Wall("vertical", 2, 3), new Wall("horizontal", 1, 4), new Wall("horizontal", 7, 3), new Wall("horizontal", 6, 4), new Wall("vertical", 7, 4), new Wall("horizontal", 5, 6), new Wall("vertical", 5, 6), new Wall("vertical", 3, 7)])
+        [new Wall("horizontal", 4, 0), new Wall("vertical", 4, 0), new Wall("vertical", 2, 1), new Wall("horizontal", 2, 2), new Wall("vertical", 2, 3), new Wall("horizontal", 1, 4), new Wall("horizontal", 7, 3), new Wall("horizontal", 6, 4), new Wall("vertical", 7, 4), new Wall("horizontal", 5, 6), new Wall("vertical", 5, 6), new Wall("vertical", 3, 7)]),
+    new Board("yellow",
+        [new Mark("yellow", "sun", 1, 5), new Mark("green", "saturn", 4, 4), new Mark("red", "star", 6, 2), new Mark("rainbow", "vortex", 2, 0), new Mark("blue", "moon", 5, 4), new Mark("green", "backslash", 4, 1), new Mark("red", "backslash", 5, 6)],
+        [new Wall("horizontal", 2, 0), new Wall("vertical", 2, 0), new Wall("horizontal", 7, 1), new Wall("horizontal", 6, 2), new Wall("vertical", 6, 2), new Wall("horizontal", 4, 4), new Wall("vertical", 5, 4), new Wall("horizontal", 5, 5), new Wall("vertical", 2, 5), new Wall("horizontal", 1, 6), new Wall("vertical", 3, 7)])
 ];
 
 
@@ -214,7 +228,7 @@ function drawFullBoard() {
     }
     for (let quadrant = 0; quadrant < 4; quadrant++){
         let board;
-        const rand = Math.floor(Math.random() * 3)
+        const rand = isAvailableBoardWithMirror ? Math.floor(Math.random() * 4) : Math.floor(Math.random() * 3)
         switch (color_array[quadrant]) {
             case 0:
                 board = blue_board_array[rand];
@@ -324,6 +338,11 @@ function updateRobotAndGoal() {
 function updateFullBoardAndRobotAndGoal() {
     redrawFullBoard();
     updateRobotAndGoal();
+}
+
+function changeMirrorAvailability() {
+    isAvailableBoardWithMirror = !isAvailableBoardWithMirror;
+    console.log(isAvailableBoardWithMirror)
 }
 
 drawFullBoard();
