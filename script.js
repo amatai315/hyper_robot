@@ -247,6 +247,7 @@ function redrawFullBoard() {
 }
 
 function redrawRobotIcon() {
+    d3.selectAll(".robot").remove();
     const place_number_array = [16 * 7 + 7, 16 * 7 + 8, 16 * 8 + 7, 16 * 8 + 8];
     let color_array = ["rgb(0,0,255)", "rgb(0, 255,0)", "rgb(255,0,0)", "rgb(209, 217, 0)", "rgb(0,0,0)"];
     for (let i = 0; i < robot_num; i++){
@@ -258,6 +259,7 @@ function redrawRobotIcon() {
         const placeCoordinateX = place_number % 16;
         const placeCoordinateY = Math.floor(place_number / 16);
         canvas.append("rect")
+            .attr("class", "robot")
             .attr("fill", color_array[i])
             .attr("x", offset + placeCoordinateX * place_size + 2)
             .attr("y", offset + placeCoordinateY * place_size + 2)
@@ -306,12 +308,22 @@ function redrawGoalRepresentIcon() {
     }
     canvas
         .append("image")
-        .attr("class", "mark")
+        .attr("class", "goal-represent-mark")
         .attr("href", `./image/${color}_${mark}.png`)
         .attr("width", 2 * place_size - 4)
         .attr("height", 2 * place_size - 4)
         .attr("x", offset + place_size * (pieceBoardPlaceVerticalNum - 1) + 2)
         .attr("y", offset + place_size * (pieceBoardPlaceVerticalNum - 1) + 2);
+}
+
+function updateRobotAndGoal() {
+    redrawRobotIcon();
+    redrawGoalRepresentIcon();
+}
+
+function updateFullBoardAndRobotAndGoal() {
+    redrawFullBoard();
+    updateRobotAndGoal();
 }
 
 drawFullBoard();
